@@ -1,17 +1,31 @@
 {
-  "name": "joy-security-app",
+  "name": "joy-security",
   "version": "1.0.0",
-  "description": "joy-security",
+  "description": "joy-security desktop app",
   "main": "main.js",
+  "build": {
+    "productName": "Joy Security",
+    "appId": "cn.joylau.code.joy-security",
+    "copyright": "Copyright (C) JoyLau. All rights reserved.",
+    "directories": {
+      "output": "build"
+    },
+    "win": {
+      "icon": "./joy-security.ico"
+    }
+  },
   "scripts": {
     "start": "electron .",
+    "build": "electron-builder builder",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "joylau",
   "license": "ISC",
   "keywords": [],
   "devDependencies": {
-    "electron": "^6.0.7"
+    "electron": "^6.0.7",
+    "electron-builder": "^21.2.0",
+    "electron-packager": "^14.0.5"
   },
   "dependencies": {
     "getmac": "^1.4.6"
