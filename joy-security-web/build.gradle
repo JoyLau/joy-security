@@ -1,0 +1,51 @@
+plugins {
+    id 'org.springframework.boot' version '2.1.7.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.7.RELEASE'
+    id 'java'
+    id 'com.google.cloud.tools.jib' version '1.2.0'
+}
+
+group = 'cn.joylau.code'
+version = '1.0'
+sourceCompatibility = '1.8'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.apache.commons:commons-text:1.7'
+    compile group: 'com.alibaba', name: 'fastjson', version: '1.2.59'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+jib {
+    from {
+        image = 'openjdk:8'
+    }
+    allowInsecureRegistries = true
+    to {
+        image = 'nas.joylau.cn:5007/joy/joy-security:' + version
+        credHelper = 'osxkeychain'
+    }
+    container {
+        appRoot = '/home/liufa/app/joy-security'
+        jvmFlags = ['-Djava.security.egd=file:/dev/./urandom', '-Duser.timezone=GMT+08']
+        mainClass = 'cn.joylau.code.MacLoginApplication'
+        workingDirectory = '/home/liufa/app/joy-security'
+        useCurrentTimestamp = true
+        ports = ['8080']
+        labels = [Descripttion: 'This image is security login for mac addr']
+    }
+}

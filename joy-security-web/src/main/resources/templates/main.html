@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Hello World</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.4.0/jquery.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="mac-req-a" style="display: none"><a id="security-login-a" href=""></a></div>
+    <div class="mac-loading" style="margin-left: 50%;margin-top: 5%">
+        <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <div class="mac-data col-md-4 order-md-2 mb-4" style="margin: 0 auto;">
+        <h4 class="d-flex justify-content-between align-items-center mb-3">
+            <span class="y-mac-addr text-muted">Please wait a moment. </span>
+        </h4>
+        <ul class="list-group mb-3">
+        </ul>
+    </div>
+    <a class="btn btn-lg btn-primary btn-block" href="/logout">Logout</a>
+</div>
+</body>
+</html>
+<script>
+    $.getJSON("getSessionId", function (data) {
+        $('#security-login-a').attr('href', "joy-security://" + data.sessionId + "_" + window.location.host + "/sendMac");
+        document.getElementById("security-login-a").click();
+    });
+    $.getJSON("getMacInfo", function (data) {
+        if (data.length > 0) {
+            $('.spinner-border').remove();
+            $('.y-mac-addr').text("Your MAC Addr");
+            $('.y-mac-addr').after('<span class="badge badge-secondary badge-pill">' + data.length + '</span>');
+            data.map(item => {
+                var online = !(item.TransportName.indexOf("disconnected") > -1);
+                var bg = online ? " bg-light" : " lh-condensed";
+                var tg = online ? "text-success" : "text-danger";
+                var rg = online ? "在线" : "断开";
+                $('.list-group').append('<li class="list-group-item d-flex justify-content-between ' + bg + '">\n' +
+                    '                    <div>\n' +
+                    '                        <h6 class="my-0">' + item.ConnectionName + '</h6>\n' +
+                    '                        <small class="text-muted">' + item.NetworkAdapter + '<br>' + item.PhysicalAddress + '</small>\n' +
+                    '                    </div>\n' +
+                    '                    <span class="' + tg + '">' + rg + '</span>\n' +
+                    '                </li>')
+            });
+        } else {
+            $('.mac-loading').remove();
+            $('.mac-data').remove();
+            $('.mac-req-a').after('<div style="text-align: center;margin-bottom: 30px;margin-top: 30px"><span>可能未安装安全组件，10s 极速下载安装 </span><a href="/joy-security_1.0.exe" download="joy-security_1.0.exe">joy-security_1.0.exe</a></div>')
+        }
+
+    })
+</script>
