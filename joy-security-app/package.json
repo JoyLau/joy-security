@@ -12,5 +12,8 @@
   "keywords": [],
   "devDependencies": {
     "electron": "^6.0.7"
+  },
+  "dependencies": {
+    "getmac": "^1.4.6"
   }
 }
