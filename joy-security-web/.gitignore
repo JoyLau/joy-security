@@ -30,3 +30,9 @@ out/
 
 ### VS Code ###
 .vscode/
+build/antd-demo/.gitignore
+build/antd-demo/README.md
+build/antd-demo/package-lock.json
+build/antd-demo/package.json
+build/antd-demo/public/
+build/antd-demo/src/
