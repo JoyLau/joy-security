@@ -95,20 +95,9 @@ function createWindow() {
 }
 
 function handleArgv(argv) {
-    console.info(argv)
-    const prefix = `${PROTOCOL}:`;
-    const offset = app.isPackaged ? 1 : 2;
-    const url = argv.find((arg, i) => i >= offset && arg.startsWith(prefix));
-    if (url) handleUrl(url);
+    console.info('argv:',argv)
 }
 
 function handleUrl(urlStr) {
-    console.info(urlStr)
-    // myapp:?a=1&b=2
-    const urlObj = new URL(urlStr);
-    console.info(urlObj);
-    const { searchParams } = urlObj;
-    console.log(urlObj.query); // -> a=1&b=2
-    console.log(searchParams.get('a')); // -> 1
-    console.log(searchParams.get('b')); // -> 2
+    console.info('urlStr',urlStr)
 }
