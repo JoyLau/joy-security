@@ -77,9 +77,9 @@ if (!gotTheLock) {
 
 function createWindow() {
     // 隐藏菜单栏,兼容 MAC
-    Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
+    Menu.setApplicationMenu(Menu.buildFromTemplate([]));
 
-    console.info(require('os').networkInterfaces());
+    // console.info(require('os').networkInterfaces());
     win = new BrowserWindow(windowConfig);
     // win.loadURL(`file://${__dirname}/index.html`);
     win.loadURL('http://localhost:3000');
