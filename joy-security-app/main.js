@@ -1,6 +1,6 @@
 const path = require('path');
 
-const {app, BrowserWindow, Menu} = require('electron');
+const {app, BrowserWindow, Menu,ipcMain} = require('electron');
 
 let win;
 
@@ -14,7 +14,10 @@ const args = [];
 let windowConfig = {
     width: 800,
     height: 600,
-    title: "Joy Security"
+    title: "Joy Security",
+    webPreferences: {
+        preload: path.join(__dirname, './public/renderer.js')
+    }
 };
 
 let menuTemplate = [{
@@ -60,6 +63,10 @@ if (!gotTheLock) {
     // macOS
     app.on('open-url', (event, urlStr) => {
         handleUrl(urlStr);
+        win.webContents.send('ch-1', 'nihao');
+        ipcMain.on('ch-2',function (event, args) {
+            console.info('收到渲染进程发送的消息',args)
+        })
     });
 
     app.on('ready', createWindow);
@@ -84,13 +91,13 @@ function createWindow() {
     // win.loadURL(`file://${__dirname}/index.html`);
     win.loadURL('http://localhost:3000');
     //开启调试工具
-    // win.webContents.openDevTools();
+    win.webContents.openDevTools();
     win.on('close', () => {
         //回收BrowserWindow对象
         win = null;
     });
     win.on('resize', () => {
-        win.reload();
+        // win.reload();
     })
 }
 
