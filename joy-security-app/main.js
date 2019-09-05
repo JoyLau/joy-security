@@ -81,7 +81,8 @@ function createWindow() {
 
     console.info(require('os').networkInterfaces());
     win = new BrowserWindow(windowConfig);
-    win.loadURL(`file://${__dirname}/index.html`);
+    // win.loadURL(`file://${__dirname}/index.html`);
+    win.loadURL('http://localhost:3000');
     //开启调试工具
     // win.webContents.openDevTools();
     win.on('close', () => {

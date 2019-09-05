@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "joy-security desktop app",
   "main": "main.js",
+  "author": "joylau",
+  "license": "ISC",
+  "keywords": [],
   "build": {
     "productName": "Joy Security",
     "appId": "cn.joylau.code.joy-security",
@@ -15,19 +18,36 @@
     }
   },
   "scripts": {
-    "start": "electron .",
+    "react-start": "react-app-rewired start",
+    "eletron-start": "electron .",
+    "react-build": "react-app-rewired build",
     "build": "electron-builder builder",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "eject": "react-scripts eject"
   },
-  "author": "joylau",
-  "license": "ISC",
-  "keywords": [],
   "devDependencies": {
     "electron": "^6.0.7",
     "electron-builder": "^21.2.0",
     "electron-packager": "^14.0.5"
   },
   "dependencies": {
-    "getmac": "^1.4.6"
-  }
+    "antd": "^3.23.1",
+    "babel-plugin-import": "^1.12.1",
+    "customize-cra": "^0.5.0",
+    "less": "^3.10.3",
+    "less-loader": "^5.0.0",
+    "react": "^16.9.0",
+    "react-app-rewired": "^2.1.0",
+    "react-dom": "^16.9.0",
+    "react-scripts": "2.1.8"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
