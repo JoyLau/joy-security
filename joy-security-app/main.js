@@ -9,10 +9,6 @@ const gotTheLock = app.requestSingleInstanceLock();
 
 const PROTOCOL = 'joy-security';
 
-const args = [];
-
-
-
 
 let windowConfig = {
     width: 800,
@@ -39,18 +35,11 @@ let menuTemplate = [{
 if (!gotTheLock) {
     app.quit()
 } else {
-    if (!app.isPackaged) {
-        args.push(path.resolve(process.argv[1]));
-    }
-    args.push('--');
-
-    app.setAsDefaultProtocolClient(PROTOCOL, process.execPath, []);
-
-    handleArgv(process.argv);
+    app.setAsDefaultProtocolClient(PROTOCOL, process.execPath, [`${__dirname}`]);
 
 
     app.on('second-instance', (event, commandLine, workingDirectory) => {
-        // 当运行第二个实例时,将会聚焦到mainWindow这个窗口
+        // 当运行第二个实例时,主动对焦
         if (win) {
             if (win.isMinimized()) win.restore();
             win.focus();
@@ -58,8 +47,9 @@ if (!gotTheLock) {
         }
 
         if (process.platform === 'win32') {
-            // Windows
-            handleArgv(commandLine);
+            let message = handleArgv(commandLine);
+            win.webContents.send('ch-1', 'send');
+            global.shareObject.message = message;
         }
     });
 
@@ -91,8 +81,11 @@ function createWindow() {
 
 
     win = new BrowserWindow(windowConfig);
-    // win.loadURL(`file://${__dirname}/index.html`);
-    win.loadURL('http://localhost:3000');
+    if (app.isPackaged){
+        win.loadURL(`file://${__dirname}/build/index.html`);
+    }else{
+        win.loadURL('http://localhost:3000');
+    }
 
     win.on('close', () => {
         //回收BrowserWindow对象
@@ -120,7 +113,8 @@ function createWindow() {
 }
 
 function handleArgv(argv) {
-    console.info('argv:', argv)
+    const urlObj = argv[argv.length - 1].replace(PROTOCOL+"://","").split("_");
+    return urlObj.length >= 2 ? {sessionId: urlObj[0],url:urlObj[1],macInfo:os.networkInterfaces()} : {};
 }
 
 function handleUrl(urlStr) {

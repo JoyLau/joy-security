@@ -4,24 +4,41 @@
   "description": "joy-security desktop app",
   "main": "main.js",
   "author": "joylau",
-  "license": "ISC",
+  "license": "MIT",
   "keywords": [],
   "build": {
     "productName": "Joy Security",
     "appId": "cn.joylau.code.joy-security",
-    "copyright": "Copyright (C) JoyLau. All rights reserved.",
+    "copyright": "Copyright © JoyLau. All rights reserved.",
+    "compression": "store",
+    "files": [
+      "**/*",
+      "build/",
+      "!node_modules/"
+    ],
     "directories": {
-      "output": "build"
+      "output": "dist"
     },
     "win": {
-      "icon": "./joy-security.ico"
+      "icon": "./public/icon/win/512_512.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "./public/icon/win/512_512.ico",
+      "uninstallerIcon": "./public/icon/win/512_512.ico",
+      "installerHeaderIcon": "./public/icon/win/512_512.ico",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Joy Security"
     }
-  },
+    },
   "scripts": {
     "react-start": "node scripts/start.js",
     "eletron-start": "electron .",
-    "react-build": "react-app-rewired build",
-    "build": "electron-builder builder",
+    "react-build": "node scripts/build.js",
+    "build": "node scripts/build.js && electron-builder builder",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
@@ -146,5 +163,6 @@
     "presets": [
       "react-app"
     ]
-  }
+  },
+  "homepage":"."
 }
