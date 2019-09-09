@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'cn.joylau.code'
-version = '1.0'
+version = '1.1'
 sourceCompatibility = '1.8'
 
 configurations {
@@ -42,7 +42,7 @@ jib {
     container {
         appRoot = '/home/liufa/app/joy-security'
         jvmFlags = ['-Djava.security.egd=file:/dev/./urandom', '-Duser.timezone=GMT+08']
-        mainClass = 'cn.joylau.code.MacLoginApplication'
+        mainClass = 'cn.joylau.code.JoySecurityApplication'
         workingDirectory = '/home/liufa/app/joy-security'
         useCurrentTimestamp = true
         ports = ['8080']

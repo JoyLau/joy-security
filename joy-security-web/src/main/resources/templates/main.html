@@ -49,16 +49,11 @@
             $('.y-mac-addr').text("Your MAC Addr");
             $('.y-mac-addr').after('<span class="badge badge-secondary badge-pill">' + data.length + '</span>');
             data.map(item => {
-                var online = !(item.TransportName.indexOf("disconnected") > -1);
-                var bg = online ? " bg-light" : " lh-condensed";
-                var tg = online ? "text-success" : "text-danger";
-                var rg = online ? "在线" : "断开";
-                $('.list-group').append('<li class="list-group-item d-flex justify-content-between ' + bg + '">\n' +
+                $('.list-group').append('<li class="list-group-item d-flex justify-content-between lh-condensed">\n' +
                     '                    <div>\n' +
-                    '                        <h6 class="my-0">' + item.ConnectionName + '</h6>\n' +
-                    '                        <small class="text-muted">' + item.NetworkAdapter + '<br>' + item.PhysicalAddress + '</small>\n' +
+                    '                        <h6 class="my-0">' + item.name + '</h6>\n' +
+                    '                        <small class="text-muted">' + item.ip + '<br>' + item.mac + '</small>\n' +
                     '                    </div>\n' +
-                    '                    <span class="' + tg + '">' + rg + '</span>\n' +
                     '                </li>')
             });
         } else {
