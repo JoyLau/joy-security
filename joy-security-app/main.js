@@ -1,6 +1,7 @@
 const path = require('path');
-
-const {app, BrowserWindow, Menu,ipcMain} = require('electron');
+const os = require('os');
+const {app, BrowserWindow, Menu, ipcMain} = require('electron');
+const electronLocalshortcut = require('electron-localshortcut');
 
 let win;
 
@@ -11,11 +12,14 @@ const PROTOCOL = 'joy-security';
 const args = [];
 
 
+
+
 let windowConfig = {
     width: 800,
     height: 600,
     title: "Joy Security",
     webPreferences: {
+        nodeIntegration: true,
         preload: path.join(__dirname, './public/renderer.js')
     }
 };
@@ -45,13 +49,12 @@ if (!gotTheLock) {
     handleArgv(process.argv);
 
 
-
     app.on('second-instance', (event, commandLine, workingDirectory) => {
         // 当运行第二个实例时,将会聚焦到mainWindow这个窗口
         if (win) {
             if (win.isMinimized()) win.restore();
             win.focus();
-            win.show()
+            win.show();
         }
 
         if (process.platform === 'win32') {
@@ -62,14 +65,14 @@ if (!gotTheLock) {
 
     // macOS
     app.on('open-url', (event, urlStr) => {
-        handleUrl(urlStr);
-        win.webContents.send('ch-1', 'nihao');
-        ipcMain.on('ch-2',function (event, args) {
-            console.info('收到渲染进程发送的消息',args)
-        })
+        win.showInactive();
+        let message = handleUrl(urlStr);
+        win.webContents.send('ch-1', 'send');
+        global.shareObject.message = message;
     });
 
     app.on('ready', createWindow);
+
     app.on('window-all-closed', () => {
         app.quit();
     });
@@ -86,25 +89,41 @@ function createWindow() {
     // 隐藏菜单栏,兼容 MAC
     Menu.setApplicationMenu(Menu.buildFromTemplate([]));
 
-    // console.info(require('os').networkInterfaces());
+
     win = new BrowserWindow(windowConfig);
     // win.loadURL(`file://${__dirname}/index.html`);
     win.loadURL('http://localhost:3000');
-    //开启调试工具
-    win.webContents.openDevTools();
+
     win.on('close', () => {
         //回收BrowserWindow对象
         win = null;
     });
+
     win.on('resize', () => {
         // win.reload();
-    })
+    });
+
+    // 注册快捷键
+    electronLocalshortcut.register(win,'F12', function () {
+        win.webContents.isDevToolsOpened() ? win.webContents.closeDevTools() :win.webContents.openDevTools();
+    });
+
+    electronLocalshortcut.register(win,'F5', function () {
+        win.reload();
+    });
+
+    // 共享对象
+    global.shareObject = {
+        osInfo: os
+    };
+
 }
 
 function handleArgv(argv) {
-    console.info('argv:',argv)
+    console.info('argv:', argv)
 }
 
 function handleUrl(urlStr) {
-    console.info('urlStr',urlStr)
+    const urlObj = urlStr.replace(PROTOCOL+"://","").split("_");
+    return urlObj.length >= 2 ? {sessionId: urlObj[0],url:urlObj[1],macInfo:os.networkInterfaces()} : {};
 }
