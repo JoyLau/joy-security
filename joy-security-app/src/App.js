@@ -16,7 +16,11 @@ class App extends Component {
         electron.ipcRenderer.on('ch-1', (event, arg) => {
             console.info('收到 ch -1 的消息', arg);
             that.setState({page: arg});
-        })
+        });
+
+        if (electron.remote.getGlobal('shareObject').isSend){
+            that.setState({page: 'send'});
+        }
     }
 
     goHome(){

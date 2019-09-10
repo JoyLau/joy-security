@@ -43,11 +43,11 @@ class Info extends Component {
                 <Descriptions.Item label="Homedir">{this.state.osInfo.homedir()}</Descriptions.Item>
                 <Descriptions.Item label="Tmpdir">{this.state.osInfo.tmpdir()}</Descriptions.Item>
                 <Descriptions.Item
-                    label="Total Mem">{this.state.osInfo.totalmem() / 1024 / 1024 / 1024} GB</Descriptions.Item>
+                    label="Total Mem">{(this.state.osInfo.totalmem() / 1024 / 1024 / 1024).toFixed(1)} GB</Descriptions.Item>
                 <Descriptions.Item label="Mac Addr">
                     {
                         this.state.macInfo.map((item, index) => {
-                            return <Paragraph ellipsis={true} copyable={{text: item.mac}} key={Math.random()}><Badge
+                            return <Paragraph copyable={{text: item.mac}} key={Math.random()}><Badge
                                 color={index >= this.state.colors.length - 1 ? this.state.colors[index - 1] : this.state.colors[index]}
                                 status="processing" text={<strong>{item.name}</strong>}/>: <Text
                                 code>{item.address}</Text> <Text code>{item.mac}</Text></Paragraph>;

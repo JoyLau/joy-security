@@ -1,6 +1,6 @@
 const path = require('path');
 const os = require('os');
-const {app, BrowserWindow, Menu, ipcMain} = require('electron');
+const {app, BrowserWindow, Menu, ipcMain,dialog} = require('electron');
 const electronLocalshortcut = require('electron-localshortcut');
 
 let win;
@@ -38,7 +38,6 @@ if (!gotTheLock) {
     // 添加 arg 参数为当前目录只为对 Windows 环境下生效
     app.setAsDefaultProtocolClient(PROTOCOL, process.execPath, [`${__dirname}`]);
 
-
     app.on('second-instance', (event, commandLine, workingDirectory) => {
         // 当运行第二个实例时,主动对焦
         if (win) {
@@ -49,17 +48,15 @@ if (!gotTheLock) {
 
         if (process.platform === 'win32') {
             let message = handleArgv(commandLine);
-            win.webContents.send('ch-1', 'send');
-            global.shareObject.message = message;
+            processSend(message);
         }
     });
 
     // macOS
     app.on('open-url', (event, urlStr) => {
         win.showInactive();
-        let message = handleUrl(urlStr);
-        win.webContents.send('ch-1', 'send');
-        global.shareObject.message = message;
+        let message = handleArgv(urlStr);
+        processSend(message);
     });
 
     app.on('ready', createWindow);
@@ -80,11 +77,11 @@ function createWindow() {
     // 隐藏菜单栏,兼容 MAC
     Menu.setApplicationMenu(Menu.buildFromTemplate([]));
 
-
     win = new BrowserWindow(windowConfig);
-    if (app.isPackaged){
+
+    if (app.isPackaged) {
         win.loadURL(`file://${__dirname}/build/index.html`);
-    }else{
+    } else {
         win.loadURL('http://localhost:3000');
     }
 
@@ -98,11 +95,11 @@ function createWindow() {
     });
 
     // 注册快捷键
-    electronLocalshortcut.register(win,'F12', function () {
-        win.webContents.isDevToolsOpened() ? win.webContents.closeDevTools() :win.webContents.openDevTools();
+    electronLocalshortcut.register(win, 'F12', function () {
+        win.webContents.isDevToolsOpened() ? win.webContents.closeDevTools() : win.webContents.openDevTools();
     });
 
-    electronLocalshortcut.register(win,'F5', function () {
+    electronLocalshortcut.register(win, 'F5', function () {
         win.reload();
     });
 
@@ -111,14 +108,25 @@ function createWindow() {
         osInfo: os
     };
 
+    let argv = process.argv;
+    if ((Array.isArray(argv) && argv[argv.length - 1].indexOf(PROTOCOL) > -1) || argv.indexOf(PROTOCOL)) {
+        global.shareObject.message = handleArgv(argv);
+        global.shareObject.isSend = true;
+    }
+
+}
+
+function processSend(message) {
+    global.shareObject.message = message;
+    win.webContents.send('ch-1', 'send');
 }
 
 function handleArgv(argv) {
-    const urlObj = argv[argv.length - 1].replace(PROTOCOL+"://","").split("_");
-    return urlObj.length >= 2 ? {sessionId: urlObj[0],url:urlObj[1],macInfo:os.networkInterfaces()} : {};
-}
-
-function handleUrl(urlStr) {
-    const urlObj = urlStr.replace(PROTOCOL+"://","").split("_");
-    return urlObj.length >= 2 ? {sessionId: urlObj[0],url:urlObj[1],macInfo:os.networkInterfaces()} : {};
+    let urlObj = [];
+    if (Array.isArray(argv)) {
+        urlObj = argv[argv.length - 1].replace(PROTOCOL + "://", "").split("_");
+    } else {
+        urlObj = argv.replace(PROTOCOL + "://", "").split("_");
+    }
+    return urlObj.length >= 2 ? {sessionId: urlObj[0], url: urlObj[1], macInfo: os.networkInterfaces()} : {};
 }

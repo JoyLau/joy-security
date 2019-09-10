@@ -11,30 +11,41 @@
     "appId": "cn.joylau.code.joy-security",
     "copyright": "Copyright © JoyLau. All rights reserved.",
     "compression": "store",
+    "asar": true,
     "files": [
       "**/*",
       "build/",
+      "!build/static/js/*.js.map",
       "!src/"
     ],
     "directories": {
       "output": "dist"
     },
     "win": {
-      "icon": "./public/icon/win/256_256.ico"
+      "icon": "./public/icons/win.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "ia32"
+          ]
+        }
+      ]
     },
     "mac": {
-      "icon": "./public/icon/osx/256_256.icns"
+      "icon": "./public/icons/osx.icns"
     },
     "nsis": {
       "oneClick": false,
       "allowElevation": true,
       "allowToChangeInstallationDirectory": true,
-      "installerIcon": "./public/icon/win/512_512.ico",
-      "uninstallerIcon": "./public/icon/win/512_512.ico",
-      "installerHeaderIcon": "./public/icon/win/512_512.ico",
+      "installerIcon": "./public/icons/win.ico",
+      "uninstallerIcon": "./public/icons/win.ico",
+      "installerHeaderIcon": "./public/icons/win.ico",
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "Joy Security"
+      "shortcutName": "Joy Security",
+      "license": "./LICENSE"
     }
   },
   "scripts": {

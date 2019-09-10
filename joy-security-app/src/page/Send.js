@@ -16,13 +16,14 @@ class Send extends Component {
         if (message) {
             $.ajax({
                 url: "http://" + message.url,
-                timeout: 3000,
+                timeout: 10000,
                 type: 'POST',
                 data: JSON.stringify(message),
                 contentType: "application/json; charset=UTF-8",
                 success: function (data) {
                     that.setState({status: 'success'});
                     electron.remote.getGlobal('shareObject').message = null;
+                    electron.remote.getGlobal('shareObject').isSend = false;
                 },
                 complete: function (XMLHttpRequest, status) {
                     that.setState({status: status})
