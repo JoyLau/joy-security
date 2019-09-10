@@ -1,11 +1,11 @@
 {
   "name": "joy-security",
   "version": "1.0.0",
-  "description": "joy-security desktop app",
+  "description": "Joy Security Desktop App",
   "main": "main.js",
   "author": "joylau",
   "license": "MIT",
-  "keywords": [],
+  "keywords": ["joylau"],
   "build": {
     "productName": "Joy Security",
     "appId": "cn.joylau.code.joy-security",
@@ -33,6 +33,18 @@
       ]
     },
     "mac": {
+      "icon": "./public/icons/osx.icns",
+      "extendInfo": {
+        "URL types": [
+          {
+            "URL Schemes": [
+              "joy-security"
+            ]
+          }
+        ]
+      }
+    },
+    "dmg": {
       "icon": "./public/icons/osx.icns"
     },
     "nsis": {
