@@ -35,6 +35,7 @@ let menuTemplate = [{
 if (!gotTheLock) {
     app.quit()
 } else {
+    // 添加 arg 参数为当前目录只为对 Windows 环境下生效
     app.setAsDefaultProtocolClient(PROTOCOL, process.execPath, [`${__dirname}`]);
 
 
