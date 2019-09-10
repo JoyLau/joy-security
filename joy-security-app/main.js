@@ -45,7 +45,10 @@ if (!gotTheLock) {
     app.on('second-instance', (event, commandLine, workingDirectory) => {
         // 当运行第二个实例时,主动对焦
         if (win) {
-            win.showInactive();
+            if (win.isMinimized()) win.restore();
+            win.focus();
+            win.show();
+
             let message = handleArgv(commandLine);
             processSend(message);
         }
