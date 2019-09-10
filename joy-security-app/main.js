@@ -9,6 +9,10 @@ const gotTheLock = app.requestSingleInstanceLock();
 
 const PROTOCOL = 'joy-security';
 
+// 共享对象
+global.shareObject = {
+    osInfo: os
+};
 
 let windowConfig = {
     width: 800,
@@ -41,12 +45,7 @@ if (!gotTheLock) {
     app.on('second-instance', (event, commandLine, workingDirectory) => {
         // 当运行第二个实例时,主动对焦
         if (win) {
-            if (win.isMinimized()) win.restore();
-            win.focus();
-            win.show();
-        }
-
-        if (process.platform === 'win32') {
+            win.showInactive();
             let message = handleArgv(commandLine);
             processSend(message);
         }
@@ -54,9 +53,15 @@ if (!gotTheLock) {
 
     // macOS
     app.on('open-url', (event, urlStr) => {
-        win.showInactive();
-        let message = handleArgv(urlStr);
-        processSend(message);
+        if (win) {
+            win.showInactive();
+            let message = handleArgv(urlStr);
+            processSend(message);
+        } else {
+            global.shareObject.message = handleArgv(urlStr);
+            global.shareObject.isSend = true;
+        }
+
     });
 
     app.on('ready', createWindow);
@@ -103,13 +108,9 @@ function createWindow() {
         win.reload();
     });
 
-    // 共享对象
-    global.shareObject = {
-        osInfo: os
-    };
-
+    // Windows 下最后一项会包含参数
     let argv = process.argv;
-    if ((Array.isArray(argv) && argv[argv.length - 1].indexOf(PROTOCOL) > -1) || argv.indexOf(PROTOCOL)) {
+    if (argv[argv.length - 1].indexOf(PROTOCOL+"://") > -1) {
         global.shareObject.message = handleArgv(argv);
         global.shareObject.isSend = true;
     }
