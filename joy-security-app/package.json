@@ -37,6 +37,7 @@
       "extendInfo": {
         "URL types": [
           {
+            "URL identifier": "Joy Security",
             "URL Schemes": [
               "joy-security"
             ]
