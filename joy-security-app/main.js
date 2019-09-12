@@ -9,32 +9,6 @@ const gotTheLock = app.requestSingleInstanceLock();
 
 const PROTOCOL = 'joy-security';
 
-const server = 'http://localhost:5011';
-const feed = `${server}/update/${process.platform}/${app.getVersion()}/stable`;
-
-console.info(feed)
-autoUpdater.setFeedURL({url:feed});
-
-setInterval(() => {
-    autoUpdater.checkForUpdates()
-}, 10000)
-
-autoUpdater.on('checking-for-update', () => {
-    console.info("开始检测更新...")
-
-})
-
-autoUpdater.on('update-available', () => {
-    console.info("检测到一个可用的更新...")
-
-})
-
-
-autoUpdater.on('update-not-available', () => {
-    console.info("开始检测更新...")
-
-})
-
 // 共享对象
 global.shareObject = {
     osInfo: os
