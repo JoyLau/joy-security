@@ -3,10 +3,14 @@
   "version": "1.0.0",
   "description": "Joy Security Desktop App",
   "main": "main.js",
-  "author": "joylau",
+  "author": {
+    "name": "JoyLau",
+    "email": "2587038142.liu@gmail.com"
+  },
+  "repository ": "https://github.com/joylau/joy-security.git",
   "license": "MIT",
   "keywords": [
-    "joylau"
+    "JoyLau"
   ],
   "build": {
     "productName": "Joy Security",
@@ -20,6 +24,10 @@
       "!build/static/js/*.js.map",
       "!src/"
     ],
+    "extraResources":[{
+      "from": "./LICENSE",
+      "to": "./../LICENSE.txt"
+    }],
     "directories": {
       "output": "dist"
     },
@@ -29,7 +37,8 @@
         {
           "target": "nsis",
           "arch": [
-            "ia32"
+            "ia32",
+            "x64"
           ]
         }
       ]
@@ -52,15 +61,17 @@
     },
     "nsis": {
       "oneClick": false,
+      "perMachine": true,
       "allowElevation": true,
       "allowToChangeInstallationDirectory": true,
       "installerIcon": "./public/icons/win.ico",
-      "uninstallerIcon": "./public/icons/win.ico",
+      "uninstallerIcon": "./public/icons/win_uninstall.ico",
       "installerHeaderIcon": "./public/icons/win.ico",
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "Joy Security",
-      "license": "./LICENSE"
+      "license": "./LICENSE",
+      "include": "./public/nsis/installer.nsh"
     }
   },
   "scripts": {
