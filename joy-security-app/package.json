@@ -1,6 +1,6 @@
 {
   "name": "joy-security",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Joy Security Desktop App",
   "main": "main.js",
   "author": {
@@ -24,10 +24,12 @@
       "!build/static/js/*.js.map",
       "!src/"
     ],
-    "extraResources":[{
-      "from": "./LICENSE",
-      "to": "./../LICENSE.txt"
-    }],
+    "extraResources": [
+      {
+        "from": "./LICENSE",
+        "to": "./../LICENSE.txt"
+      }
+    ],
     "directories": {
       "output": "dist"
     },
