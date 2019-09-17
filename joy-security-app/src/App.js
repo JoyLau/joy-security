@@ -14,7 +14,6 @@ class App extends Component {
     componentWillMount() {
         let that = this;
         electron.ipcRenderer.on('ch-1', (event, arg) => {
-            console.info('收到 ch -1 的消息', arg);
             that.setState({page: arg});
         });
 

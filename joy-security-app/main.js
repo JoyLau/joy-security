@@ -1,5 +1,6 @@
 const path = require('path');
 const os = require('os');
+const appConfig =  require('./src/Config');
 const {app, BrowserWindow, Menu, ipcMain, dialog, autoUpdater} = require('electron');
 const electronLocalshortcut = require('electron-localshortcut');
 
@@ -7,7 +8,7 @@ let win;
 
 const gotTheLock = app.requestSingleInstanceLock();
 
-const PROTOCOL = 'joy-security';
+const PROTOCOL = appConfig.PROTOCOL;
 
 // 共享对象
 global.shareObject = {
