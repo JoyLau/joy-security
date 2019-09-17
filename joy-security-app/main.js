@@ -12,7 +12,8 @@ const PROTOCOL = appConfig.PROTOCOL;
 
 // 共享对象
 global.shareObject = {
-    osInfo: os
+    osInfo: os,
+    path: `${__dirname}`
 };
 
 let windowConfig = {
