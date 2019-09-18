@@ -15,7 +15,7 @@ class Send extends Component {
         let message = electron.remote.getGlobal('shareObject').message;
         if (message) {
             $.ajax({
-                url: "http://" + message.url,
+                url: message.url.indexOf('http') > -1 ? message.url : "http://" + message.url,
                 timeout: 10000,
                 type: 'POST',
                 data: JSON.stringify(message),
