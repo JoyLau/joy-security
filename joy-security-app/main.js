@@ -1,6 +1,6 @@
 const path = require('path');
 const os = require('os');
-const appConfig =  require('./src/Config');
+const appConfig =  require('./config');
 const {app, BrowserWindow, Menu, ipcMain, dialog, autoUpdater} = require('electron');
 const electronLocalshortcut = require('electron-localshortcut');
 

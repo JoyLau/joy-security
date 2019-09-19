@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import './../App.less';
 import {Button, Card, Col, Divider, Icon, List, Progress, Row, Spin, Typography} from 'antd';
 import updateImg from '../../public/update.png';
-import appConfig from '../Config';
+import appConfig from '../../config';
 import $ from 'jquery';
 import semver from 'semver';
 import request from 'request';
@@ -93,6 +93,7 @@ class Update extends Component {
                     })
                 })
                 .on('end', function () {
+                    if (that.state.update === 'error') return;
                     that.setState({
                         update: 'install',
                     });
