@@ -10,7 +10,7 @@ class Copyright extends Component {
         const path = electron.remote.getGlobal('shareObject').path;
         let win = new BrowserWindow({
             width: 350,
-            height: 420,
+            height: 550,
             webPreferences: {
                 nodeIntegration: true,
                 webSecurity: false,
