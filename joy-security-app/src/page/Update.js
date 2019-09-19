@@ -115,6 +115,7 @@ class Update extends Component {
                                 stdio: ['ignore', 'ignore', 'ignore']
                             });
 
+                            // 重启
                             app.relaunch();
                             app.quit();
                         }
@@ -165,7 +166,12 @@ class Update extends Component {
                                     />
                                 }/>
                             </div>
-                            : <Meta title={<div style={{textAlign:'center'}}><span>当前已经是最新版本</span></div>}/>
+                            : <Meta title={
+                                <div>
+                                    <Row><Col><div style={{textAlign:'center'}}><h3>当前已经是最新版本</h3></div></Col></Row>
+                                    <Row><Col offset={8} span={8}><Text type="secondary" style={{fontSize:'12px'}}>当前版本: v{app.getVersion()}</Text></Col></Row>
+                                </div>
+                            }/>
                     }
 
                 </Card>

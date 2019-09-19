@@ -1,6 +1,6 @@
 {
   "name": "joy-security",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Joy Security Desktop App",
   "main": "main.js",
   "author": {
@@ -80,7 +80,7 @@
     "react-start": "node scripts/start.js",
     "eletron-start": "electron .",
     "react-build": "node scripts/build.js",
-    "build": "node scripts/build.js && electron-builder builder",
+    "build": "node scripts/build.js && electron-builder -mw",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
