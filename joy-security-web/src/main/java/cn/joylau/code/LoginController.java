@@ -2,8 +2,10 @@ package cn.joylau.code;
 
 import cn.joylau.code.model.Message;
 import com.alibaba.fastjson.JSONObject;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -19,7 +21,18 @@ import java.util.concurrent.ConcurrentMap;
 @Controller
 public class LoginController {
 
+    private final RestTemplate restTemplate;
+
     private ConcurrentMap<String, List<JSONObject>> macInfos = new ConcurrentHashMap<>();
+
+    public LoginController(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
+    @Scheduled(fixedRate = 1000 * 60 * 60)
+    public void run() {
+        macInfos.clear();
+    }
 
     @RequestMapping("/")
     public String index(HttpServletRequest request) {
@@ -46,10 +59,16 @@ public class LoginController {
         String sessionId = request.getSession().getId();
         long time = System.currentTimeMillis();
         List<JSONObject> macInfo = macInfos.get(sessionId);
-        while (System.currentTimeMillis() - time < 20 * 1000 && macInfo == null) {
+        while (System.currentTimeMillis() - time < 10 * 1000 && macInfo == null) {
             macInfo = macInfos.get(sessionId);
         }
         return macInfo == null ? new ArrayList<>() : macInfo;
+    }
+
+    @ResponseBody
+    @GetMapping("/getAppInfo")
+    public String getAppInfo() {
+        return restTemplate.getForObject("http://nas.joylau.cn:5006/joy-security/update.json", String.class);
     }
 
 
@@ -93,8 +112,8 @@ public class LoginController {
                                         json.put("ip", info.get("address"));
                                         infos.add(json);
                                     }
-                }));
-        macInfos.put(message.getSessionId(),infos);
+                                }));
+        macInfos.put(message.getSessionId(), infos);
 
     }
 }

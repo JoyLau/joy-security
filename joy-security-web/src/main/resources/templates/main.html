@@ -72,17 +72,30 @@
         } else {
             var fileName = "#";
             var downloadUrl;
-
-            if(detectOS() === "Win"){
-                fileName = 'Joy Security.exe';
-            }
-            if(detectOS() === "Mac"){
-                fileName = 'Joy Security.dmg';
-            }
-            downloadUrl = 'http://nas.joylau.cn:5006/joy-security/' + fileName;
-            $('.mac-loading').remove();
-            $('.mac-data').remove();
-            $('.mac-req-a').after('<div style="text-align: center;margin-bottom: 30px;margin-top: 30px"><span>可能未安装安全组件，10s 极速下载安装 </span><a target="_blank" href="'+downloadUrl+'" download="'+fileName+'">'+fileName+'</a></div>')
+            $.ajax({
+                url: "getAppInfo",
+                type: 'GET',
+                cache:false,
+                success: function (data) {
+                    let latest = JSON.parse(data)[0];
+                    if(detectOS() === "Win"){
+                        downloadUrl = latest.download.winSetup;
+                    }
+                    if(detectOS() === "Mac"){
+                        downloadUrl = latest.download.dmg;
+                    }
+                    var downloadUrlArr = downloadUrl.split("/");
+                    fileName = downloadUrlArr[downloadUrlArr.length-1];
+                    $('.mac-loading').remove();
+                    $('.mac-data').remove();
+                    $('.mac-req-a').after('<div style="text-align: center;margin-bottom: 30px;margin-top: 30px"><span>可能未安装安全组件，10s 极速下载安装 </span><a target="_blank" href="'+downloadUrl+'" download="'+fileName+'">'+fileName+'</a></div>')
+                },
+                error: function () {
+                    $('.mac-loading').remove();
+                    $('.mac-data').remove();
+                    $('.mac-req-a').after('<div style="text-align: center;margin-bottom: 30px;margin-top: 30px"><span>可能未安装安全组件，获取最新版安装包失败!!!</span></div>')
+                }
+            });
         }
 
     });
