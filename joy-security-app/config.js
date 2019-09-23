@@ -7,7 +7,7 @@ const appConfig = {
     // 自动检查更新延迟时间
     checkUpdateDelay: 30000,
     // copyright 信息
-    copyright: "© Docm, Inc."
+    copyright: "© Docm Inc."
 };
 
 module.exports = appConfig;
