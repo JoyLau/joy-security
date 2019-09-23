@@ -1,14 +1,19 @@
 const path = require('path');
 const os = require('os');
 const appConfig =  require('./config');
-const {app, BrowserWindow, Menu, ipcMain, dialog, autoUpdater} = require('electron');
+const update = require('./update');
+const electron = require('electron');
+const {app, BrowserWindow, Menu} = electron;
 const electronLocalshortcut = require('electron-localshortcut');
+const request = require('request');
+const semver = require("semver");
+const listener = require("./listener");
 
 let win;
-
 const gotTheLock = app.requestSingleInstanceLock();
-
 const PROTOCOL = appConfig.PROTOCOL;
+
+listener.init();
 
 // 共享对象
 global.shareObject = {
@@ -17,25 +22,16 @@ global.shareObject = {
 };
 
 let windowConfig = {
-    width: 800,
+    width: 850,
     height: 600,
-    title: "Joy Security",
+    frame: false,
+    resizable: false,
+    title: appConfig.indexTitle,
     webPreferences: {
         nodeIntegration: true,
         preload: path.join(__dirname, './public/renderer.js')
     }
 };
-
-let menuTemplate = [{
-    label: 'Joy Security',
-    submenu: [{
-        label: '退出',
-        role: 'quit'
-    }, {
-        label: `关于 ${windowConfig.title}`,
-        role: 'about'
-    }]
-}];
 
 
 if (!gotTheLock) {
@@ -58,15 +54,20 @@ if (!gotTheLock) {
 
     // macOS
     app.on('open-url', (event, urlStr) => {
-        if (win) {
+        if (app.isPackaged){
+            if (win) {
+                win.showInactive();
+                let message = handleArgv(urlStr);
+                processSend(message);
+            } else {
+                global.shareObject.message = handleArgv(urlStr);
+                global.shareObject.isSend = true;
+            }
+        } else {
             win.showInactive();
             let message = handleArgv(urlStr);
             processSend(message);
-        } else {
-            global.shareObject.message = handleArgv(urlStr);
-            global.shareObject.isSend = true;
         }
-
     });
 
     app.on('ready', createWindow);
@@ -120,6 +121,10 @@ function createWindow() {
         global.shareObject.isSend = true;
     }
 
+    setTimeout(function () {
+        checkUpdate();
+    },appConfig.checkUpdateDelay)
+
 }
 
 function processSend(message) {
@@ -135,4 +140,20 @@ function handleArgv(argv) {
         urlObj = argv.replace(PROTOCOL + "://", "").split("_");
     }
     return urlObj.length >= 2 ? {sessionId: urlObj[0], url: urlObj[1], macInfo: os.networkInterfaces()} : {};
+}
+
+function checkUpdate() {
+    const options = {
+        method: 'GET',
+        timeout: 1000,
+        json: true,
+    };
+    request(appConfig.updateCheckURL,options,(err, response, data) => {
+        if (!err && response.statusCode === 200) {
+            let latest = data[0];
+            if(semver.satisfies(latest.version, '>' + app.getVersion())){
+                update.init();
+            }
+        }
+    });
 }

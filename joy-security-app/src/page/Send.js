@@ -41,9 +41,9 @@ class Send extends Component {
             <div>
                 {
                     this.state.status === 'init' ?
-                        <Spin tip="校验数据发送中..." size="large">
+                        <Spin style={{color:"black"}} tip="校验数据发送中..." size="large">
 
-                            <div style={{padding: '30%'}}>
+                            <div style={{height: '600px'}}>
 
                             </div>
                         </Spin>
@@ -51,7 +51,7 @@ class Send extends Component {
                         :
                         this.state.status === 'success' ?
                             <Result
-                                style={{paddingTop: '10%'}}
+                                style={{paddingTop: '20%'}}
                                 title="Great, we have done all the operations!!"
                                 icon={<Icon type="smile" theme="twoTone"/>}
                                 extra={<Button type="primary" onClick={() => this.goHome()}>Got It</Button>}
@@ -75,7 +75,7 @@ class Send extends Component {
                                         extra={<Button type="primary" onClick={() => this.goHome()}>Go Home</Button>}
                                     />
                                     :
-                                    <div></div>
+                                    <div/>
 
                 }
             </div>

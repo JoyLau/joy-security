@@ -1,8 +1,11 @@
 import React, {Component} from 'react';
 import './App.less';
-import Info from './page/Info'
+import Info from './page/Info';
+import Index from './page/index/Index';
 import Copyright from "./page/Copyright";
 import Send from "./page/Send";
+import Drag from "./page/index/drag/Drag";
+import Menu from "./page/index/menu/Menu";
 
 const electron = window.electron;
 
@@ -29,15 +32,22 @@ class App extends Component {
     render() {
         return (
             <div>
+                <Drag/>
+                <Menu/>
                 {
-                    this.state.page === 'index'
-                    ?
+                    this.state.page === 'index' ?
+                    <Index/>
+                    :
+                    this.state.page === 'info' ?
                     <div>
                         <Info/>
                         <Copyright/>
                     </div>
                     :
+                    this.state.page === 'send' ?
                     <Send goHome = {() => {this.goHome()}}/>
+                    :
+                    <div/>
 
                 }
             </div>

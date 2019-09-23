@@ -8,6 +8,7 @@ import semver from 'semver';
 import request from 'request';
 import progress from 'request-progress';
 import pjson from './../../package';
+import Drag from "./index/drag/Drag";
 
 const fs = window.fs;
 const cp = window.cp;
@@ -54,7 +55,7 @@ class Update extends Component {
         let that = this;
         const platform = osInfo.platform();
         try {
-            const downloadUrl = platform === 'darwin' ? this.state.latest.download.dmg : platform === 'win32' ? this.state.latest.download.winSetup : '22';
+            const downloadUrl = platform === 'darwin' ? this.state.latest.download.dmg : platform === 'win32' ? this.state.latest.download.winSetup : '';
             if (downloadUrl === '') return;
 
             const downloadUrlArr = downloadUrl.split("/");
@@ -143,7 +144,9 @@ class Update extends Component {
     render() {
         return (
             <Spin spinning={this.state.check} tip="检查更新中..." size="small">
+                <Drag/>
                 <Card
+                    style={{background: 'rgba(255, 255, 255, 0)'}}
                     bordered={false}
                     cover={<img draggable={false} alt={'update'} style={{width: '200px', margin: '0 auto'}}
                                 src={updateImg}/>}
@@ -171,6 +174,7 @@ class Update extends Component {
                                 <div>
                                     <Row><Col><div style={{textAlign:'center'}}><h3>当前已经是最新版本</h3></div></Col></Row>
                                     <Row><Col offset={8} span={8}><Text type="secondary" style={{fontSize:'12px'}}>当前版本: v{app.getVersion()}</Text></Col></Row>
+                                    <Row style={{marginTop:80}}><Col offset={9} span={8}><Button size={'small'} shape="round" type="primary" icon="close" onClick={() => {electron.remote.getCurrentWindow().close()}}>关闭</Button></Col></Row>
                                 </div>
                             }/>
                     }
