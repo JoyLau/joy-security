@@ -189,7 +189,7 @@ class Text extends Component {
                                     return <Paragraph copyable={{text: item.mac}} key={Math.random()}>
                                         <Badge
                                             color={index >= this.state.colors.length - 1 ? this.state.colors[index - 1] : this.state.colors[index]}
-                                            status="processing" text={<strong>{item.name}</strong>}/> MAC:&nbsp;&nbsp;
+                                            status="processing" text={<strong>{item.name.length > 9 ? item.name.substring(0,8) + "...": item.name}</strong>}/> MAC:&nbsp;&nbsp;
                                         <Typography.Text type="secondary">{item.mac}</Typography.Text>
                                     </Paragraph>;
                                 })
