@@ -3,12 +3,19 @@ import Texty from 'rc-texty';
 import TweenOne from 'rc-tween-one';
 import 'rc-texty/assets/index.css';
 import './text.css';
+import {Badge, Typography} from "antd";
+
+const {Paragraph } = Typography;
+const electron = window.electron;
 
 class Text extends Component {
     state = {
         show: true,
         flash: true,
-        flashDelay: 3800
+        flashDelay: 3800,
+        macInfo:[],
+        colors: ['blue', 'pink', 'orange', 'magenta', 'cyan', 'green', 'purple', 'red', 'geekblue', 'yellow', 'volcano', 'gold', 'lime']
+
     };
     geInterval = (e) => {
         switch (e.index) {
@@ -61,6 +68,25 @@ class Text extends Component {
             });
         });
     };
+
+    componentWillMount() {
+        let osInfo = electron.remote.getGlobal('shareObject').osInfo;
+        let macInfo = [];
+        let net = osInfo.networkInterfaces();
+        let netKeys = [];
+        for (let property in net) {
+            netKeys.push(property);
+        }
+        netKeys.map(key => {
+            net[key].map(item => {
+                if (item.family === 'IPv4' && item.mac !== '00:00:00:00:00:00') {
+                    macInfo.push({name: key, mac: item.mac, address: item.address})
+                }
+            })
+        });
+
+        this.setState({macInfo: macInfo});
+    }
 
     componentDidMount() {
         let that = this;
@@ -153,6 +179,22 @@ class Text extends Component {
                         >
                             {this.state.flash && 'Waiting for the request . . . . . .'}
                         </Texty>
+
+                        <TweenOne
+                            className="mac-content"
+                            animation={{delay: 4800, y: 300, type: 'from', ease: 'easeInOutQuint', duration: 1000 }}
+                        >
+                            {
+                                this.state.macInfo.slice(0,4).map((item, index) => {
+                                    return <Paragraph copyable={{text: item.mac}} key={Math.random()}>
+                                        <Badge
+                                            color={index >= this.state.colors.length - 1 ? this.state.colors[index - 1] : this.state.colors[index]}
+                                            status="processing" text={<strong>{item.name}</strong>}/> MAC:&nbsp;&nbsp;
+                                        <Typography.Text type="secondary">{item.mac}</Typography.Text>
+                                    </Paragraph>;
+                                })
+                            }
+                        </TweenOne>
                     </div>
                 )}
             </div>

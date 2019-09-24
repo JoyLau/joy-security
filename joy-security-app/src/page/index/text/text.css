@@ -4,6 +4,7 @@
     height: 578px;
     position: relative;
     width: 100%;
+    overflow: hidden;
 }
 .combined-reload {
     position: absolute;
@@ -68,4 +69,21 @@
     text-align: center;
     position: absolute;
     top: 98px;
+}
+.combined .mac-content {
+    font-size: 12px;
+    text-align: left;
+    position: absolute;
+    top: 150px;
+    left: 90px;
+    z-index: 3;
+}
+.combined .mac-content .ant-typography {
+    color: white;
+}
+.combined .mac-content .ant-typography .ant-badge-status-text{
+    color: white;
+}
+.combined .mac-content .ant-typography .ant-typography-copy{
+    color: gold;
 }
