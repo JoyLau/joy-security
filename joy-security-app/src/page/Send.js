@@ -6,11 +6,16 @@ const electron = window.electron;
 
 class Send extends Component {
     state = {
-        status: 'init'
+        status: 'init',
+        reSendDisabled: false,
     };
 
 
     componentWillMount() {
+        this.sendMessage();
+    }
+
+    sendMessage = () =>{
         let that = this;
         let message = electron.remote.getGlobal('shareObject').message;
         if (message) {
@@ -21,7 +26,7 @@ class Send extends Component {
                 data: JSON.stringify(message),
                 contentType: "application/json; charset=UTF-8",
                 success: function (data) {
-                    that.setState({status: 'success'});
+                    that.setState({status: 'success',reSendDisabled: true});
                     electron.remote.getGlobal('shareObject').message = null;
                     electron.remote.getGlobal('shareObject').isSend = false;
                 },
@@ -30,6 +35,10 @@ class Send extends Component {
                 }
             });
         }
+    };
+
+    reSend (){
+        this.sendMessage();
     }
 
     goHome(){
@@ -41,7 +50,7 @@ class Send extends Component {
             <div>
                 {
                     this.state.status === 'init' ?
-                        <Spin style={{color:"black"}} tip="校验数据发送中..." size="large">
+                        <Spin style={{color:"black"}} tip="Calibration Data Sending..." size="large">
 
                             <div style={{height: '600px'}}>
 
@@ -54,7 +63,7 @@ class Send extends Component {
                                 style={{paddingTop: '20%'}}
                                 title="Great, we have done all the operations!!"
                                 icon={<Icon type="smile" theme="twoTone"/>}
-                                extra={<Button type="primary" onClick={() => this.goHome()}>Got It</Button>}
+                                extra={<div><Button type="primary" icon="redo" onClick={() => this.reSend()} disabled={this.state.reSendDisabled}>Resend</Button><Button type="primary" icon="check" onClick={() => this.goHome()} style={{marginLeft:10}}>Got It</Button></div>}
                             />
                             :
                             this.state.status === 'error' ?

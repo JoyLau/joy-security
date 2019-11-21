@@ -17,7 +17,12 @@ class App extends Component {
     componentWillMount() {
         let that = this;
         electron.ipcRenderer.on('ch-1', (event, arg) => {
-            that.setState({page: arg});
+            // 如果当前页面就处于发送页面,则重新发送
+            if (arg === 'send' && this.state.page === 'send'){
+                this.sendCom.reSend();
+            } else {
+                that.setState({page: arg});
+            }
         });
 
         if (electron.remote.getGlobal('shareObject').isSend){
@@ -45,7 +50,9 @@ class App extends Component {
                     </div>
                     :
                     this.state.page === 'send' ?
-                    <Send goHome = {() => {this.goHome()}}/>
+                    <Send goHome = {() => {this.goHome()}}
+                          ref = {child => this.sendCom = child}
+                    />
                     :
                     <div/>
 
