@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Button, Icon, Result, Spin} from 'antd';
 import $ from 'jquery';
+import Logo from "./index/logo/Logo";
 
 const electron = window.electron;
 
@@ -59,12 +60,16 @@ class Send extends Component {
 
                         :
                         this.state.status === 'success' ?
-                            <Result
-                                style={{paddingTop: '20%'}}
-                                title="Great, we have done all the operations!!"
-                                icon={<Icon type="smile" theme="twoTone"/>}
-                                extra={<div><Button type="primary" icon="redo" onClick={() => this.reSend()} disabled={this.state.reSendDisabled}>Resend</Button><Button type="primary" icon="check" onClick={() => this.goHome()} style={{marginLeft:10}}>Got It</Button></div>}
-                            />
+                            <div>
+                                <Logo/>
+                                <Result
+                                    style={{paddingTop: '20%'}}
+                                    title="Great, we have done all the operations!!"
+                                    icon={<Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a"/>}
+                                    extra={<div><Button type="primary" icon="redo" onClick={() => this.reSend()} disabled={this.state.reSendDisabled}>Resend</Button><Button type="primary" icon="check" onClick={() => this.goHome()} style={{marginLeft:10}}>Got It</Button></div>}
+                                />
+                            </div>
+
                             :
                             this.state.status === 'error' ?
                                 <Result

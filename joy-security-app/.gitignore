@@ -89,3 +89,4 @@ typings/
 .dynamodb/
 *.iml
 
+/dist/

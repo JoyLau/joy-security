@@ -1,5 +1,19 @@
 [
   {
+    "version": "1.3.3",
+    "force": false,
+    "time": "2019-11-26",
+    "download": {
+      "winSetup": "http://nas.joylau.cn:5006/joy-security/1.3.3/MAC Security Setup 1.3.3.exe",
+      "dmg": "http://nas.joylau.cn:5006/joy-security/1.3.3/MAC Security-1.3.3.dmg",
+      "appZip": "http://nas.joylau.cn:5006/joy-security/1.3.3/MAC Security-1.3.3-mac.zip"
+    },
+    "description": [
+      "1. 修复了 MacOS 下更新的问题",
+      "2. 部分界面优化"
+    ]
+  },
+  {
     "version": "1.3.2",
     "force": false,
     "time": "2019-11-21",

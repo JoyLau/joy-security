@@ -10,17 +10,13 @@ class Drag extends Component {
     render() {
         return (
             <div className="menu">
-                <Dropdown overlay={
+                <Dropdown trigger={['click']} overlay={
                     <Menu>
-                        <Menu.Item>
-                            <a href onClick={() => electron.ipcRenderer.send('check-update')}>
-                                <Icon type="to-top" /> 检查更新
-                            </a>
+                        <Menu.Item onClick={() => electron.ipcRenderer.send('check-update')}>
+                            <Icon type="to-top" /> 检查更新
                         </Menu.Item>
-                        <Menu.Item disabled>
-                            <a href onClick={() => {}}>
-                                <Icon type="info" /> 关于
-                            </a>
+                        <Menu.Item disabled onClick={() => {}}>
+                            <Icon type="info" /> 关于
                         </Menu.Item>
                     </Menu>
                 }>

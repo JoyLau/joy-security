@@ -103,19 +103,31 @@ class Update extends Component {
                         if (platform === 'darwin'){
                             const appName = pjson.build.productName;
                             const appVersion = app.getVersion();
-                            console.info(appName,appVersion);
-                            // 挂载
-                            cp.execSync(`hdiutil attach '${savePath}' -nobrowse`, {
-                                stdio: ['ignore', 'ignore', 'ignore']
-                            });
+                            const latestVersion = that.state.latest.version;
 
-                            // 覆盖原 app
-                            cp.execSync(`rm -rf '/Applications/${appName}.app' && cp -R '/Volumes/${appName} ${appVersion}/${appName}.app' '/Applications/${appName}.app'`);
+                            console.info('appName:',appName);
+                            console.info("appVersion",appVersion);
+                            console.info("latestVersion",latestVersion);
+                            console.info("savePath",savePath);
 
-                            // 卸载挂载的 dmg
-                            cp.execSync(`hdiutil eject '/Volumes/${appName} ${appVersion}'`, {
-                                stdio: ['ignore', 'ignore', 'ignore']
-                            });
+                            try { // 挂载
+                                cp.execSync(`hdiutil attach '${savePath}' -nobrowse`, {
+                                    stdio: ['ignore', 'ignore', 'ignore']
+                                });
+
+                                // 覆盖原 app
+                                cp.execSync(`rm -rf '/Applications/${appName}.app' && cp -R '/Volumes/${appName} ${latestVersion}/${appName}.app' '/Applications/${appName}.app'`);
+
+                                // 卸载挂载的 dmg
+                                cp.execSync(`hdiutil eject '/Volumes/${appName} ${latestVersion}'`, {
+                                    stdio: ['ignore', 'ignore', 'ignore']
+                                });
+                            } catch (e) {
+                                console.info("error",e);
+                                that.setState({
+                                    update: 'error',
+                                })
+                            }
 
                             // 重启
                             app.relaunch();

@@ -3,7 +3,11 @@ const {app, BrowserWindow} = electron;
 const electronLocalshortcut = require('electron-localshortcut') || window.electronLocalshortcut;
 
 const update = {
-    init: function() {
+    init: function () {
+        // 判断是否可以重复打开
+        if (global.updateWin) {
+            return;
+        }
         let win = new BrowserWindow({
             width: 350,
             height: 550,
@@ -24,6 +28,7 @@ const update = {
         });
 
         win.on('close', function () {
+            global.updateWin = false;
             win = null
         });
         if (app.isPackaged) {
@@ -36,6 +41,8 @@ const update = {
         electronLocalshortcut.register(win, 'F12', function () {
             win.webContents.isDevToolsOpened() ? win.webContents.closeDevTools() : win.webContents.openDevTools();
         });
+
+        global.updateWin = true;
     }
 };
 
